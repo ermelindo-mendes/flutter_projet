@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ipssisqy2023/controller/my_permission.dart';
+import 'package:ipssisqy2023/view/loading_view.dart';
 import 'package:ipssisqy2023/view/resgister_view.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  //MyPermissionPhoto().init();
   runApp(const MyApp());
 }
 
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.purple,
       ),
-      home: const MyRegisterView(),
+      home: const MyLoading(),
       debugShowCheckedModeBanner: false,
     );
   }
