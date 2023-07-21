@@ -51,12 +51,11 @@ class _MessagingPageState extends State<MessagingPage> {
         'TIMESTAMP': DateTime.now(),
       };
 
-      // Envoyer le message à l'utilisateur sélectionné
       await FirestoreHelper.addMessage(currentUserId, widget.user.id, message);
 
-      // Mettre à jour la liste des messages pour inclure le nouveau message envoyé
+
       setState(() {
-        messages.insert(0, message); // Insérer le nouveau message en haut de la liste
+        messages.insert(0, message);
       });
 
       _messageController.clear();
