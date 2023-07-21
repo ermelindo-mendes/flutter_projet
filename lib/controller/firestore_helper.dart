@@ -34,7 +34,7 @@ class FirestoreHelper {
     }
   }
 
-  static Future<List<Map<String, dynamic>>?> getMessages(String userId, String recipientId) async {
+  /* static Future<List<Map<String, dynamic>>?> getMessages(String userId, String recipientId) async {
     List<Map<String, dynamic>>? messages = [];
     try {
       QuerySnapshot senderQuery = await FirebaseFirestore.instance
@@ -58,7 +58,40 @@ class FirestoreHelper {
       print("Une erreur s'est produite lors de la récupération des messages : $error");
     }
     return messages;
+  }*/
+
+  static Future<List<Map<String, dynamic>>?> getMessages(String userId, String recipientId) async {
+    List<Map<String, dynamic>>? messages = [];
+    try {
+
+      QuerySnapshot senderQuery = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('SENDER', isEqualTo: userId)
+          .where('RECIPIENT', isEqualTo: recipientId)
+          .get();
+
+      QuerySnapshot recipientQuery = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('SENDER', isEqualTo: recipientId)
+          .where('RECIPIENT', isEqualTo: userId)
+          .get();
+
+
+      messages.addAll(senderQuery.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>());
+
+
+      messages.addAll(recipientQuery.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>());
+
+
+      messages.sort((a, b) => (b['TIMESTAMP'] as Timestamp).compareTo(a['TIMESTAMP'] as Timestamp));
+    } catch (error) {
+      print("Une erreur s'est produite lors de la récupération des messages : $error");
+    }
+    return messages;
   }
+
+
+
 
   static Future<List<Map<String, dynamic>>?> getConversations(String currentUserId) async {
     List<Map<String, dynamic>>? conversations = [];

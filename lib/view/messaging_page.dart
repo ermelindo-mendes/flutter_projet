@@ -5,7 +5,6 @@ import '../controller/firestore_helper.dart';
 import '../model/my_user.dart';
 import 'my_background.dart';
 
-
 class MessagingPage extends StatefulWidget {
   final MyUser user;
   const MessagingPage({super.key, required this.user});
@@ -15,7 +14,6 @@ class MessagingPage extends StatefulWidget {
 }
 
 class _MessagingPageState extends State<MessagingPage> {
-
   final TextEditingController _messageController = TextEditingController();
   List<Map<String, dynamic>> messages = [];
   String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? "";
@@ -24,18 +22,17 @@ class _MessagingPageState extends State<MessagingPage> {
   void initState() {
     getMessages();
     super.initState();
-
   }
 
   Future<void> getMessages() async {
-    List<Map<String, dynamic>>? userMessages = await FirestoreHelper.getMessages(currentUserId, widget.user.id);
+    List<Map<String, dynamic>>? userMessages =
+    await FirestoreHelper.getMessages(currentUserId, widget.user.id);
     setState(() {
       messages = userMessages!;
     });
   }
 
   Widget _buildMessageItem(String message) {
-
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -59,7 +56,7 @@ class _MessagingPageState extends State<MessagingPage> {
 
       // Mettre à jour la liste des messages pour inclure le nouveau message envoyé
       setState(() {
-        messages.add(message);
+        messages.insert(0, message); // Insérer le nouveau message en haut de la liste
       });
 
       _messageController.clear();
@@ -73,40 +70,58 @@ class _MessagingPageState extends State<MessagingPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-
-        title: Text(widget.user.fullName, style: const TextStyle(color: Colors.black), ),
+        title: Text(
+          widget.user.fullName,
+          style: const TextStyle(color: Colors.black),
+        ),
         iconTheme: const IconThemeData(color: Colors.black),
-
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           const MyBackground(),
-         const MyBackground2(),
+          const MyBackground2(),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-               // Text("Conversation avec ${widget.user.fullName}"),
+                // Text("Conversation avec ${widget.user.fullName}"),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> message = messages[index];
-                      bool isSentByMe = message['SENDER'] == currentUserId;
-                      String messageContent = message['CONTENT'];
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Column(
+                      children: messages
+                          .map((message) {
+                        bool isSentByMe = message['SENDER'] == currentUserId;
+                        String messageContent = message['CONTENT'];
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: ChatBubble(
-                          clipper: ChatBubbleClipper9(type: isSentByMe ? BubbleType.sendBubble : BubbleType.receiverBubble),
-                          alignment: isSentByMe ? Alignment.topRight : Alignment.topLeft,
-                          margin: const EdgeInsets.only(top: 4),
-                          backGroundColor: isSentByMe ? Colors.blue : Colors.grey[300],
-                          child: Text(messageContent, style: TextStyle(color: isSentByMe ? Colors.white : Colors.black)),
-                        ),
-                      );
-                    },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: ChatBubble(
+                            clipper: ChatBubbleClipper9(
+                                type: isSentByMe
+                                    ? BubbleType.sendBubble
+                                    : BubbleType.receiverBubble),
+                            alignment: isSentByMe
+                                ? Alignment.topRight
+                                : Alignment.topLeft,
+                            margin: const EdgeInsets.only(top: 4),
+                            backGroundColor: isSentByMe
+                                ? Colors.blue
+                                : Colors.grey[300],
+                            child: Text(
+                              messageContent,
+                              style: TextStyle(
+                                  color:
+                                  isSentByMe ? Colors.white : Colors.black),
+                            ),
+                          ),
+                        );
+                      })
+                          .toList()
+                          .reversed
+                          .toList(), // Inverser l'ordre des messages pour les afficher du plus récent au plus ancien
+                    ),
                   ),
                 ),
                 Form(
