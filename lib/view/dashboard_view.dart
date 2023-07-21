@@ -26,7 +26,7 @@ class _MyDashBoardViewState extends State<MyDashBoardView> {
         child: const MyDrawer(),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.purple,
         elevation: 0,
       ),
       backgroundColor: Colors.white,

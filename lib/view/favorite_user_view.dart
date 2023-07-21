@@ -44,7 +44,7 @@ class _SinglePageState extends State<SinglePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Details'),
+        title: const Text('User Details'),
       ),
       body: Center(
         child: user != null

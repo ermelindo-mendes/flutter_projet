@@ -80,24 +80,40 @@ class _ConversationsPageState extends State<ConversationsPage> {
                       String lastMessageContent = messages.first['CONTENT'] as String;
                       DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(messages.first['TIMESTAMP'].seconds * 1000);
 
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(recipientUser.avatar!),
-                        ),
-                        title: Text(recipientName),
-                        subtitle: Text(lastMessageContent),
-                        trailing: Text(
-                          "${timestamp.hour}:${timestamp.minute}",
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MessagingPage(user: recipientUser),
+                      return Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Couleur de la bordure (noir)
+                              width: 0.5, // Épaisseur de la bordure
                             ),
-                          );
-                        },
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 8,
+                              blurRadius: 7,
+                              offset: const Offset(0,3),
+                            )
+                          ]
+                        ),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(recipientUser.avatar!),
+                          ),
+                          title: Text(recipientName),
+                          subtitle: Text(lastMessageContent),
+                          trailing: Text(
+                            "${timestamp.hour}:${timestamp.minute}",
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MessagingPage(user: recipientUser),
+                              ),
+                            );
+                          },
+                        ),
                       );
                     },
                   );

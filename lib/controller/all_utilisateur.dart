@@ -36,7 +36,7 @@ class _AllUsersState extends State<AllUsers> {
                     return Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                      color: Colors.grey,
+                      color: Colors.white,
                       child: ListTile(
                         leading: Container(
                           height: 50,

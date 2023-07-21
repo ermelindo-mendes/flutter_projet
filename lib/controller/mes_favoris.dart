@@ -47,6 +47,14 @@ class _MyFavoritesState extends State<MyFavorites> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                  color: Colors.grey.withOpacity(0.3), // Couleur de l'ombre et son opacité
+                    spreadRadius: 3, // Étendue de l'ombre (plus grande étendue donne un flou plus important)
+                    blurRadius: 5, // Rayon du flou (plus grand donne un flou plus étendu)
+                    offset: const Offset(0, 3),
+
+                  )],
                 borderRadius: BorderRadius.circular(15)
               ),
               child: Center(
