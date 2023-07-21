@@ -11,6 +11,8 @@ class MyUser {
   String? avatar;
   Gender genre = Gender.indefini;
   List? favoris;
+  double? latitude;
+  double? longitude;
 
   String get fullName {
     return prenom + " " + nom;
@@ -22,7 +24,8 @@ class MyUser {
     mail = "";
     nom = "";
     prenom = "";
-
+    latitude = null;
+    longitude= null;
   }
 
   MyUser(DocumentSnapshot snapshot) {
@@ -33,6 +36,8 @@ class MyUser {
     prenom = map["PRENOM"];
     String? provisoirePseudo = map["PSEUDO"];
     favoris = map["FAVORIS"] ?? [];
+    latitude = map["LATITUDE"] ?? 0.0;
+    longitude = map["LONGITUDE"]?? 0.0;
     if(provisoirePseudo == null) {
       pseudo = "";
     }

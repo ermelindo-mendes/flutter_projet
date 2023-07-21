@@ -51,4 +51,17 @@ class FirestoreHelper {
    String uid = resultat.user?.uid ?? "";
    return getUser(uid);
   }
+
+  // Récupérer tous les utilisateurs
+  Future<List<MyUser>> getAllUsers() async {
+    QuerySnapshot snapshot = await cloudUsers.get();
+    List<MyUser> users = [];
+
+    for (var document in snapshot.docs) {
+      MyUser user = MyUser(document);
+      users.add(user);
+    }
+
+    return users;
+  }
 }
