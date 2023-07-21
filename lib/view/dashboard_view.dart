@@ -29,7 +29,7 @@ class _MyDashBoardViewState extends State<MyDashBoardView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white,
       body: bodyPage(),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
