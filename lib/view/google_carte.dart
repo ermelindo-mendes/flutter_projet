@@ -62,7 +62,7 @@ class _CarteGoogleState extends State<CarteGoogle> {
                     context: context,
                     builder: (context) => AlertDialog(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                      content: CustomInfoWindow(user: user),
+                      content: customInfoWindow,
                     ),
                   );
                 },
@@ -80,14 +80,3 @@ class _CarteGoogleState extends State<CarteGoogle> {
     );
   }
 }
-
-/*onTap: () {
-// Naviguer vers la page de messagerie lorsque l'utilisateur clique sur l'info-bulle
-Navigator.push(
-context,
-MaterialPageRoute(
-builder: (context) => const Placeholder() //MessagePage(user: user),
-),
-);
-infoWindowText: CustomInfoWindow(user: user);
-}, */

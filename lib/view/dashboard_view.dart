@@ -3,6 +3,7 @@ import 'package:ipssisqy2023/controller/all_utilisateur.dart';
 import 'package:ipssisqy2023/controller/mes_favoris.dart';
 import 'package:ipssisqy2023/view/my_drawer.dart';
 
+import 'all_conversations.dart';
 import 'my_map_view.dart';
 
 class MyDashBoardView extends StatefulWidget {
@@ -31,6 +32,8 @@ class _MyDashBoardViewState extends State<MyDashBoardView> {
       backgroundColor: Colors.blue,
       body: bodyPage(),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
+        //selectedItemColor: Colors.black26,
         currentIndex: currentIndex,
         onTap: (index){
           setState(() {
@@ -38,29 +41,38 @@ class _MyDashBoardViewState extends State<MyDashBoardView> {
           });
 
         },
-        items: const [
+        backgroundColor: Colors.purple,
+        iconSize: 30,
+        items: const <BottomNavigationBarItem> [
           BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "Utilisateurs"
+              icon: Icon(Icons.person, color: Colors.black26,),
+              label: "Utilisateurs",
+              backgroundColor: Colors.white
           ),
 
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.favorite, color: Colors.black26),
               label: "Mes amis"
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.map),
+              icon: Icon(Icons.map, color: Colors.black26),
               label: "carte"
+          ),
+         BottomNavigationBarItem(
+              icon: Icon(Icons.message, color: Colors.black26),
+              label: "Messages"
           )
         ],
+          selectedItemColor: Colors.purple
       ),
     );
   }
-  Widget bodyPage(){
+  Widget bodyPage() {
     switch(currentIndex){
       case 0 : return const AllUsers();
       case 1 : return const MyFavorites();
       case 2 : return const MyMapView();
+      case 3 : return ConversationsPage();
       default: return const Text("Probleme d'affichage");
     }
   }

@@ -10,6 +10,85 @@ class FirestoreHelper {
   final storage = FirebaseStorage.instance;
   final cloudUsers = FirebaseFirestore.instance.collection("UTILISATEURS");
 
+  // Méthode pour ajouter un nouveau message
+  static Future<void> addMessage(
+      String senderId, String recipientId, Map<String, dynamic> message) async {
+    CollectionReference messagesCollection =
+    FirebaseFirestore.instance.collection("MESSAGES");
+
+    // Obtenez l'horodatage actuel
+    DateTime currentTime = DateTime.now();
+
+    try {
+      // Ajoutez le nouveau message avec les champs spécifiés
+      await messagesCollection.add({
+        'SENDER': senderId,
+        'RECIPIENT': recipientId,
+        'CONTENT': message['CONTENT'],
+        'TIMESTAMP': currentTime,
+      });
+
+      print("Le message a été ajouté avec succès !");
+    } catch (error) {
+      print("Une erreur s'est produite lors de l'ajout du message : $error");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>?> getMessages(String userId, String recipientId) async {
+    List<Map<String, dynamic>>? messages = [];
+    try {
+      QuerySnapshot senderQuery = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('SENDER', isEqualTo: userId)
+          .where('RECIPIENT', isEqualTo: recipientId)
+          .orderBy('TIMESTAMP', descending: true)
+          .get();
+
+      QuerySnapshot recipientQuery = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('SENDER', isEqualTo: recipientId)
+          .where('RECIPIENT', isEqualTo: userId)
+          .orderBy('TIMESTAMP', descending: true)
+          .get();
+
+      messages.addAll(senderQuery.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>());
+      messages.addAll(recipientQuery.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>());
+      messages.sort((a, b) => b['TIMESTAMP'].compareTo(a['TIMESTAMP']));
+    } catch (error) {
+      print("Une erreur s'est produite lors de la récupération des messages : $error");
+    }
+    return messages;
+  }
+
+  static Future<List<Map<String, dynamic>>?> getConversations(String currentUserId) async {
+    List<Map<String, dynamic>>? conversations = [];
+    try {
+      // Récupérer les conversations où l'utilisateur est l'expéditeur (SENDER)
+      QuerySnapshot senderQuerySnapshot = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('SENDER', isEqualTo: currentUserId)
+          .orderBy('TIMESTAMP', descending: true)
+          .get();
+
+      // Récupérer les conversations où l'utilisateur est le destinataire (RECIPIENT)
+      QuerySnapshot recipientQuerySnapshot = await FirebaseFirestore.instance
+          .collection("MESSAGES")
+          .where('RECIPIENT', isEqualTo: currentUserId)
+          .orderBy('TIMESTAMP', descending: true)
+          .get();
+
+      // Fusionner les deux listes de conversations
+      conversations = senderQuerySnapshot.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>().toList();
+      conversations.addAll(recipientQuerySnapshot.docs.map((doc) => doc.data()).cast<Map<String, dynamic>>().toList());
+
+      // Trier la liste des conversations par heure de message décroissante
+      conversations.sort((a, b) => b['TIMESTAMP'].compareTo(a['TIMESTAMP']));
+    } catch (error) {
+      print("Une erreur s'est produite lors de la récupération des conversations : $error");
+    }
+    return conversations;
+  }
+
   // Inscription
  Future <MyUser> register(String email, String password, String nom, String prenom) async {
    UserCredential resultat = await auth.createUserWithEmailAndPassword(email: email, password: password);

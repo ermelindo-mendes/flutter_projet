@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../model/my_user.dart';
+import '../view/messaging_page.dart';
 
 class CustomInfoWindow extends StatelessWidget {
   final MyUser user;
@@ -41,7 +42,7 @@ class CustomInfoWindow extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Placeholder(), //MessagingPage(user: user),
+                  builder: (context) =>  MessagingPage(user: user), //MessagingPage(user: user),
                 ),
               );
             },

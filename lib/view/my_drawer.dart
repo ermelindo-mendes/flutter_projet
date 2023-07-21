@@ -41,14 +41,16 @@ class _MyDrawerState extends State<MyDrawer> {
                     FirestoreHelper().stockageData("images", me.id, nameImages!, bytesImages!).then((value){
                       setState(() {
                         me.avatar = value;
-                      });
-                    });
-                    Map<String,dynamic> map = {
-                      "AVATAR": me.avatar
-                    };
-                    FirestoreHelper().updateUser(me.id, map);
 
-                    Navigator.pop(context);
+                      });
+                      Map<String,dynamic> map = {
+                        "AVATAR": value
+                      };
+                      FirestoreHelper().updateUser(me.id, map);
+
+                      Navigator.pop(context);
+                    });
+
                   },
                   child: const Text("Enregistrer"))
             ],
